@@ -1,9 +1,11 @@
 {
   "dependencies": {
     "@types/bcryptjs": "^2.4.2",
+    "@types/jsonwebtoken": "^8.5.8",
     "bcryptjs": "^2.4.3",
     "express": "^4.18.1",
     "express-validator": "^6.14.1",
+    "jsonwebtoken": "^8.5.1",
     "mongoose": "^6.3.6"
   },
   "name": "inverse-dependency",

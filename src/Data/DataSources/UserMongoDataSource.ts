@@ -2,7 +2,7 @@ import { User } from "../../Domain/Entities/User";
 import UserDataSource from "../Interfaces/DataSources/UserDataSource";
 import { UserModelI } from "../Interfaces/DataSources/Mongodb/UserModelInterface";
 import { Types } from 'mongoose';
-import { ErrorBDEntityFound } from "../../Domain/Entities/Errors";
+import { ErrorBDEntityFound, ErrorBDEntityNotFound } from "../../Domain/Entities/Errors";
 
 
 export default class UserMongoDataSourceImpl implements UserDataSource {
@@ -14,7 +14,6 @@ export default class UserMongoDataSourceImpl implements UserDataSource {
 
   async create(user: User): Promise<User> {
     const isUserOnDB = await this.userModel.find({email: user.email});
-    console.log(isUserOnDB)
     if(isUserOnDB.length) throw new ErrorBDEntityFound('Username already exists on database')
     
     const newUser = new this.userModel(user);
@@ -27,6 +26,13 @@ export default class UserMongoDataSourceImpl implements UserDataSource {
 
   async getById(id: Types.ObjectId): Promise<User> {
     return await this.userModel.findById(id);
+  }
+
+  async getByEmail(email: string): Promise<User> {
+    const isUserOnDB = await this.userModel.find({email});
+    if(!isUserOnDB.length) throw new ErrorBDEntityNotFound('');
+
+    return isUserOnDB[0];
   }
 
   async edit(id: Types.ObjectId, user: User): Promise<User> {

@@ -18,7 +18,11 @@ export class UserRepositoryImpl implements UsersRepository {
   async getById(id: Types.ObjectId): Promise<User> {
     return await this.dataSource.getById(id);
   }
-  
+
+  async getByEmail(email: string): Promise<User> {
+    return await this.dataSource.getByEmail(email);
+  }
+
   async create(user: User): Promise<User> {
     const salt = await bcryptjs.genSalt(14);
     user.password = await bcryptjs.hash(user.password, salt);

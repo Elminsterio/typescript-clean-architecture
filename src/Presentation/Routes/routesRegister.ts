@@ -1,39 +1,44 @@
 import { UserRoutes } from "./User/userRoutes";
-import { Router, Application } from "express";
-import { userController } from "../Controllers/userController";
+import { Express, Application } from "express";
+import { UserController } from "../Controllers/userController";
 import { GetUsersUseCase } from "../../Domain/UseCases/User/GetUsers";
 import { CreateUserUseCase } from "../../Domain/UseCases/User/CreateUser";
 import { UsersRepository } from "../../Domain/Repositories/UsersRepository";
 import { RoutesRegisterI } from "../Interfaces/Routes/routesRegisterInterface";
+import { AuthController } from "../Controllers/authController";
+import { LoginUseCase } from "../../Domain/UseCases/Auth/Login";
+import { AuthRoutes } from "./Auth/authRoutes";
 
 
 export class RoutesRegister implements RoutesRegisterI {
-  router: Router;
-  app: Application;
+  app: Express;
 
   constructor(
-    app: Application,
-    router: Router
+    app: Express,
   ) {
-    this.app = app
-    this.router = router;
+    this.app = app;
   }
 
-  public registerAllRoutes(): Router {
+  public registerAllRoutes(): Application {
+    
     const userRepo: UsersRepository = UserRoutes.userRepo;
     const userUseCases = {
       getUser: new GetUsersUseCase(userRepo),
       createUser: new CreateUserUseCase(userRepo)
     }
-    const userCont: userController = new userController(userUseCases.getUser, 
+    const loginUseCases = {
+      login: new LoginUseCase(userRepo)
+    }
+    const userCont: UserController = new UserController(userUseCases.getUser, 
                                                         userUseCases.createUser)
     const userRoutes: UserRoutes = new UserRoutes(userCont);
+
+    const authCont: AuthController = new AuthController(loginUseCases.login);
+    const authRoutes: AuthRoutes = new AuthRoutes(authCont);
     
-    userRoutes.registerRoutes(this.app, this.router);
-    
-    return this.router;
+    this.app.use('/api/user', userRoutes.registerRoutes());
+    this.app.use('/api/auth', authRoutes.registerRoutes());
+
+    return this.app;
   }
-
-  
-
 }

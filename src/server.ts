@@ -1,25 +1,22 @@
 import { json, urlencoded } from 'body-parser';
 import mongoose from 'mongoose';
-import express, { Router, Express, ErrorRequestHandler } from 'express';
+import express, { Express, ErrorRequestHandler } from 'express';
 import * as http from 'http';
 import { RoutesRegister } from './Presentation/Routes/routesRegister';
 import { ErrorHandler } from './Presentation/ErrorHandlers/ErrorHandler';
 
 export class Server {
   private express: Express;
-  private router: Router;
   private port: string;
   private httpServer?: http.Server;
-  //constructor(config)
+
   constructor(port: string) {
     this.port = port;
     this.express = express();
     this.express.use(json());
     this.express.use(urlencoded({ extended: true }));
 
-    this.router = express.Router();
-    new RoutesRegister(this.express, this.router).registerAllRoutes();
-  
+    new RoutesRegister(this.express).registerAllRoutes();
     this.express.use(ErrorHandler.manageError as ErrorRequestHandler);
   }
 
