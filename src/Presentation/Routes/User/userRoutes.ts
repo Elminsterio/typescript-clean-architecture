@@ -23,7 +23,13 @@ export class UserRoutes implements UserRoutesI {
     router.get('/', installGetUsersRoute);
     const installCreateUsersRoute = (req: Request, res: Response, next: NextFunction) => this.createUser(req, res, next);
     router.post('/', createUserValidator, installCreateUsersRoute);
-
+    const installUpdateUsersRoute = (req: Request, res: Response, next: NextFunction) => this.updateUser(req, res, next);
+    router.patch('/:id', createUserValidator, installUpdateUsersRoute);
+    const installDeleteUsersRoute = (req: Request, res: Response, next: NextFunction) => this.deleteUser(req, res, next);
+    router.delete('/:id', installDeleteUsersRoute);
+    const installGetUsersByIdRoute = (req: Request, res: Response, next: NextFunction) => this.getUserById(req, res, next);
+    router.get('/:id', installGetUsersByIdRoute);
+    
     return router;
   }
   
@@ -40,6 +46,31 @@ export class UserRoutes implements UserRoutesI {
     try {
       const user = await this.userController.createUser(req, res);
       return res.json({result: user});
+    } catch(error) {
+      return next(error);
+    }
+  }
+
+  async getUserById(req: Request, res: Response, next: NextFunction): Promise<Response | void> {
+    try {
+      const user = await this.userController.getUserById(req, res);
+      return res.json({result: user});
+    } catch(error) {
+      return next(error);
+    }
+  }
+  async updateUser(req: Request, res: Response, next: NextFunction): Promise<Response | void> {
+    try {
+      const user = await this.userController.updateUser(req, res);
+      return res.json({result: user});
+    } catch(error) {
+      return next(error);
+    }
+  }
+  async deleteUser(req: Request, res: Response, next: NextFunction): Promise<Response | void> {
+    try {
+      await this.userController.deleteUser(req, res);
+      return res.json({});
     } catch(error) {
       return next(error);
     }

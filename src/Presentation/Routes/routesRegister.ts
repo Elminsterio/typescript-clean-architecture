@@ -8,6 +8,9 @@ import { RoutesRegisterI } from "../Interfaces/Routes/routesRegisterInterface";
 import { AuthController } from "../Controllers/authController";
 import { LoginUseCase } from "Domain/UseCases/Auth/Login";
 import { AuthRoutes } from "./Auth/authRoutes";
+import { UpdateUserUseCase } from "Domain/UseCases/User/UpdateUser";
+import { DeleteUserUseCase } from "Domain/UseCases/User/DeleteUser";
+import { GetUserByIdUseCase } from "Domain/UseCases/User/GetUserById";
 
 
 export class RoutesRegister implements RoutesRegisterI {
@@ -24,13 +27,20 @@ export class RoutesRegister implements RoutesRegisterI {
     const userRepo: UsersRepository = UserRoutes.userRepo;
     const userUseCases = {
       getUser: new GetUsersUseCase(userRepo),
-      createUser: new CreateUserUseCase(userRepo)
+      createUser: new CreateUserUseCase(userRepo),
+      updateUser: new UpdateUserUseCase(userRepo),
+      deleteUser: new DeleteUserUseCase(userRepo),
+      getUserById: new GetUserByIdUseCase(userRepo)
     }
     const loginUseCases = {
       login: new LoginUseCase(userRepo)
     }
     const userCont: UserController = new UserController(userUseCases.getUser, 
-                                                        userUseCases.createUser)
+                                                        userUseCases.createUser,
+                                                        userUseCases.updateUser,
+                                                        userUseCases.deleteUser,
+                                                        userUseCases.getUserById);
+
     const userRoutes: UserRoutes = new UserRoutes(userCont);
 
     const authCont: AuthController = new AuthController(loginUseCases.login);

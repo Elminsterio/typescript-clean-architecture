@@ -22,7 +22,6 @@ export class AuthRoutes implements AuthRoutesI {
   async login(req: Request, res: Response, next: NextFunction): Promise<Response | void> {
     try {
       const token = await this.authController.Login(req, res);
-      console.log(token)
       return res.json({result: token});
     } catch(error) {
       return next(error);

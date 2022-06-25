@@ -4,16 +4,29 @@ import { UserModelI } from '../../../Interfaces/DataSources/Mongodb/UserModelInt
 
 
 export class UserModel implements UserModelI {
-  public userSchema: Schema;
+  private userSchema: Schema;
   public model: Model<User>;
 
   constructor() {
     this.userSchema = new Schema<User>({
-      name: { type: String, required: true },
+      creationDate: { type: Date, default: Date.now },
       email: { type: String, required: true },
+      name: { type: String, required: true },
       password: { type: String, required: true },
-      avatar: { type: String }
+      active: { type: Boolean, default: true },
+      verified: { type: Boolean, default: true },
+      img: { type: String }
     });
+
+    this.userSchema.methods.toJSON = function() {
+    
+      let user = this;
+      let userObject = user.toObject();
+      delete userObject.password;
+      
+      return userObject;
+    }
+
     this.model = model<User>('User', this.userSchema);
   }
 }

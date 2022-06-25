@@ -16,5 +16,4 @@ export class OneWorkBackendApp {
   async stop() {
     return this.server?.stop();
   }
-
 }

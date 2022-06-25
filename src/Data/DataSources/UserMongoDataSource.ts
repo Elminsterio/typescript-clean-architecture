@@ -1,7 +1,7 @@
 import { User } from "Domain/Entities/User";
 import UserDataSource from "../Interfaces/DataSources/UserDataSource";
 import { UserModelI } from "../Interfaces/DataSources/Mongodb/UserModelInterface";
-import { Types } from 'mongoose';
+import { Types, Model } from 'mongoose';
 import { ErrorBDEntityFound, ErrorBDEntityNotFound } from "Domain/Entities/Errors";
 
 
@@ -25,7 +25,10 @@ export default class UserMongoDataSourceImpl implements UserDataSource {
   }
 
   async getById(id: Types.ObjectId): Promise<User> {
-    return await this.userModel.findById(id);
+    const isUserOnDB = await this.userModel.findById({_id: id});
+    if(!isUserOnDB) throw new ErrorBDEntityNotFound('');
+
+    return isUserOnDB;
   }
 
   async getByEmail(email: string): Promise<User> {
@@ -36,10 +39,10 @@ export default class UserMongoDataSourceImpl implements UserDataSource {
   }
 
   async edit(id: Types.ObjectId, user: User): Promise<User> {
-    return await this.userModel.findByIdAndUpdate(id, user);
+    return await this.userModel.findByIdAndUpdate(id, user, {new: true, runValidators: true});
   }
 
   async delete(id: Types.ObjectId): Promise<User> {
-    return await this.userModel.findByIdAndDelete(id);
+    return await this.userModel.findByIdAndDelete(id, {runValidators: true});
   }
 }
