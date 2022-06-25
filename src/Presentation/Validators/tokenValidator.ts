@@ -1,4 +1,4 @@
-import { UnathorizedError } from "../../Domain/Entities/Errors";
+import { UnathorizedError } from "Domain/Entities/Errors";
 import jwt from 'jsonwebtoken';
 
 export class TokenValidator {

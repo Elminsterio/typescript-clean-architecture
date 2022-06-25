@@ -1,5 +1,5 @@
 import { Schema, model, Model } from 'mongoose';
-import { User } from "../../../../Domain/Entities/User";
+import { User } from "Domain/Entities/User";
 import { UserModelI } from '../../../Interfaces/DataSources/Mongodb/UserModelInterface';
 
 

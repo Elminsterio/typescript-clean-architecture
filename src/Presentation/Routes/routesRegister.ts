@@ -1,12 +1,12 @@
 import { UserRoutes } from "./User/userRoutes";
 import { Express, Application } from "express";
 import { UserController } from "../Controllers/userController";
-import { GetUsersUseCase } from "../../Domain/UseCases/User/GetUsers";
-import { CreateUserUseCase } from "../../Domain/UseCases/User/CreateUser";
-import { UsersRepository } from "../../Domain/Repositories/UsersRepository";
+import { GetUsersUseCase } from "Domain/UseCases/User/GetUsers";
+import { CreateUserUseCase } from "Domain/UseCases/User/CreateUser";
+import { UsersRepository } from "Domain/Repositories/UsersRepository";
 import { RoutesRegisterI } from "../Interfaces/Routes/routesRegisterInterface";
 import { AuthController } from "../Controllers/authController";
-import { LoginUseCase } from "../../Domain/UseCases/Auth/Login";
+import { LoginUseCase } from "Domain/UseCases/Auth/Login";
 import { AuthRoutes } from "./Auth/authRoutes";
 
 

@@ -1,4 +1,4 @@
-import { User } from "../../../Domain/Entities/User";
+import { User } from "Domain/Entities/User";
 
 export default interface UserDataSource {
   get(): Promise<User[]> | User[];

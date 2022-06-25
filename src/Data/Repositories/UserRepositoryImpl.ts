@@ -1,5 +1,5 @@
-import { User } from "../../Domain/Entities/User";
-import { UsersRepository } from "../../Domain/Repositories/UsersRepository";
+import { User } from "Domain/Entities/User";
+import { UsersRepository } from "Domain/Repositories/UsersRepository";
 import UserDataSource from "../Interfaces/DataSources/UserDataSource";
 import { Types } from "mongoose";
 import bcryptjs from "bcryptjs";

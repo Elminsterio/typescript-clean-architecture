@@ -1,10 +1,10 @@
-import { GetUsersUseCaseI } from "../../Domain/UseCases/User/GetUsers";
-import { CreateUserUseCaseI } from "../../Domain/UseCases/User/CreateUser";
+import { GetUsersUseCaseI } from "Domain/UseCases/User/GetUsers";
+import { CreateUserUseCaseI } from "Domain/UseCases/User/CreateUser";
 import { Request, Response } from "express";
-import { User } from "../../Domain/Entities/User";
+import { User } from "Domain/Entities/User";
 import { UserControllerI } from "../Interfaces/Controllers/userControllerInterface";
 import { validationResult } from 'express-validator';
-import { MultipleValidationDataError } from "../../Domain/Entities/Errors";
+import { MultipleValidationDataError } from "Domain/Entities/Errors";
 
 export class UserController implements UserControllerI<Request, Response> {
   getUserUseCase: GetUsersUseCaseI;

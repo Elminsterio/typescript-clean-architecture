@@ -1,5 +1,5 @@
 import { AuthControllerI } from "../Interfaces/Controllers/authControllerInterface";
-import { LoginUseCaseI } from "../../Domain/UseCases/Auth/Login";
+import { LoginUseCaseI } from "Domain/UseCases/Auth/Login";
 import { Request, Response } from "express";
 
 
