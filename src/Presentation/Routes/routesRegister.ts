@@ -46,10 +46,9 @@ export class RoutesRegister implements RoutesRegisterI {
                                                         userUseCases.updateUser,
                                                         userUseCases.deleteUser,
                                                         userUseCases.getUserById);
+    const authCont: AuthController = new AuthController(loginUseCases.login);
 
     const userRoutes: UserRoutes = new UserRoutes(userCont);
-
-    const authCont: AuthController = new AuthController(loginUseCases.login);
     const authRoutes: AuthRoutes = new AuthRoutes(authCont);
     
     this.app.use('/api/user', userRoutes.registerRoutes());

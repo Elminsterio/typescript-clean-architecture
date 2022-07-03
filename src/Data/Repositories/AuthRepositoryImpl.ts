@@ -2,7 +2,7 @@ import jwt from 'jsonwebtoken';
 import bcryptjs from 'bcryptjs';
 import { AuthRepository } from 'Domain/Repositories/AuthRepository';
 import { User } from 'Domain/Entities/User';
-// import { UnathorizedError } from '@Domain';
+import { UnathorizedError } from 'Domain/Entities/Errors';
 
 export class AuthRepositoryImpl implements AuthRepository {
   
@@ -20,12 +20,12 @@ export class AuthRepositoryImpl implements AuthRepository {
   }
 
   signToken(user: User): string {
+    // TODO: Decidir donde se deben filtrar los datos que sean payload.
     return jwt.sign({...user},'secret', {expiresIn: 300});
   }
 
   verifyToken(bearerToken: string): void {
-    // if(!bearerToken) throw new UnathorizedError('Bearer token is not provided or is invalid')
-    
+    if(!bearerToken) throw new UnathorizedError('Bearer token is not provided or is invalid')
     const rawToken = bearerToken.split(' ');
     const token = rawToken[0];
 
