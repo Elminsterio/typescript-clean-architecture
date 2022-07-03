@@ -1,7 +1,7 @@
 import { User } from "Domain/Entities/User";
-import UserDataSource from "../Interfaces/DataSources/UserDataSource";
-import { UserModelI } from "../Interfaces/DataSources/Mongodb/UserModelInterface";
-import { Types, Model } from 'mongoose';
+import UserDataSource from "../../Interfaces/DataSources/UserDataSource";
+import { UserModelI } from "../../Interfaces/DataSources/Mongodb/UserModelInterface";
+import { Types } from 'mongoose';
 import { ErrorBDEntityFound, ErrorBDEntityNotFound } from "Domain/Entities/Errors";
 
 

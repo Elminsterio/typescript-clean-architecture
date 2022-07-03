@@ -3,7 +3,6 @@ import { Express, Application } from "express";
 import { UserController } from "../Controllers/userController";
 import { GetUsersUseCase } from "Domain/UseCases/User/GetUsers";
 import { CreateUserUseCase } from "Domain/UseCases/User/CreateUser";
-import { UsersRepository } from "Domain/Repositories/UsersRepository";
 import { RoutesRegisterI } from "../Interfaces/Routes/routesRegisterInterface";
 import { AuthController } from "../Controllers/authController";
 import { LoginUseCase } from "Domain/UseCases/Auth/Login";
@@ -11,6 +10,7 @@ import { AuthRoutes } from "./Auth/authRoutes";
 import { UpdateUserUseCase } from "Domain/UseCases/User/UpdateUser";
 import { DeleteUserUseCase } from "Domain/UseCases/User/DeleteUser";
 import { GetUserByIdUseCase } from "Domain/UseCases/User/GetUserById";
+import { AuthRepositoryImpl } from "Data/Repositories/AuthRepositoryImpl";
 
 
 export class RoutesRegister implements RoutesRegisterI {
@@ -24,17 +24,23 @@ export class RoutesRegister implements RoutesRegisterI {
 
   public registerAllRoutes(): Application {
     
-    const userRepo: UsersRepository = UserRoutes.userRepo;
+    const repositories = {
+      userRepo: UserRoutes.userRepo,
+      authRepo: new AuthRepositoryImpl()
+    }
+
     const userUseCases = {
-      getUser: new GetUsersUseCase(userRepo),
-      createUser: new CreateUserUseCase(userRepo),
-      updateUser: new UpdateUserUseCase(userRepo),
-      deleteUser: new DeleteUserUseCase(userRepo),
-      getUserById: new GetUserByIdUseCase(userRepo)
+      getUser: new GetUsersUseCase(repositories.userRepo),
+      createUser: new CreateUserUseCase(repositories.userRepo, repositories.authRepo),
+      updateUser: new UpdateUserUseCase(repositories.userRepo, repositories.authRepo),
+      deleteUser: new DeleteUserUseCase(repositories.userRepo),
+      getUserById: new GetUserByIdUseCase(repositories.userRepo)
     }
+
     const loginUseCases = {
-      login: new LoginUseCase(userRepo)
+      login: new LoginUseCase(repositories.userRepo, repositories.authRepo)
     }
+
     const userCont: UserController = new UserController(userUseCases.getUser, 
                                                         userUseCases.createUser,
                                                         userUseCases.updateUser,

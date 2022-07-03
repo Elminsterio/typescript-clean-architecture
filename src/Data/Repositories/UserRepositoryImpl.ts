@@ -24,14 +24,10 @@ export class UserRepositoryImpl implements UsersRepository {
   }
 
   async create(user: User): Promise<User> {
-    const salt = await bcryptjs.genSalt(14);
-    user.password = await bcryptjs.hash(user.password, salt);
     return await this.dataSource.create(user);
   }
 
   async edit(id: Types.ObjectId, user: User): Promise<User> {
-    const salt = await bcryptjs.genSalt(14);
-    user.password = await bcryptjs.hash(user.password, salt);
     return await this.dataSource.edit(id, user);
   }
 

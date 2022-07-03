@@ -1,8 +1,7 @@
 import { User } from "../../Entities/User";
 import { UsersRepository } from "../../Repositories/UsersRepository";
 import { ErrorPwdOrUserNotFound } from "../../Entities/Errors";
-import jwt from 'jsonwebtoken';
-import bcryptjs from 'bcryptjs';
+import { AuthRepository } from "Domain/Repositories/AuthRepository";
 
 export interface LoginUseCaseI {
   invoke: (email: User['email'], password: User['password']) => object
@@ -10,19 +9,22 @@ export interface LoginUseCaseI {
 
 export class LoginUseCase implements LoginUseCaseI {
   public usersRepository: UsersRepository;
+  public authRepository: AuthRepository;
   
-  constructor(_userRepository: UsersRepository) {
+  constructor(_userRepository: UsersRepository,
+              _authRepository: AuthRepository) {
     this.usersRepository = _userRepository;
+    this.authRepository = _authRepository;
   }
 
   public async invoke(email: User['email'], password: User['password']) {
     const userExist: User = await this.usersRepository.getByEmail(email);
     if (!userExist) throw new ErrorPwdOrUserNotFound('Password or user is incorrect');
 
-    const correctPassword = await bcryptjs.compare(password, userExist.password);
+    const correctPassword = await this.authRepository.compareHashes(password, userExist.password);
     if(!correctPassword) throw new ErrorPwdOrUserNotFound('Password or user is incorrect');
    
-    const token = jwt.sign({...userExist}, 'secret', {expiresIn: 300});
+    const token = this.authRepository.signToken(userExist);
     return { token, userExist }
   } 
 }
